@@ -1,0 +1,30 @@
+name: publish package
+
+on:
+  push:
+    branches:
+      - *
+
+jobs:
+  build:
+    name: build-and-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.3'
+
+      - name: install poetry
+        uses: Gr1N/setup-poetry@v7
+
+      - name: install
+        run: |
+          make install
+
+      - name: build whl
+        run: |
+          make dist
