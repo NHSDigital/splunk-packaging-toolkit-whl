@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "splunk-packaging-toolkit-whl"
+version = "0.1.0"
+description = ""
+authors = ["DDC <ddc@nhs.net>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+wheel = "*"
+
+[build-system]
+requires = [
+    "poetry>=0.12"
+]
+build-backend = "poetry.masonry.api"
