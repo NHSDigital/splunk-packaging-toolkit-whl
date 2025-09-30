@@ -66,3 +66,6 @@ jobs:
         with:
           name: sbom
           path: sbom.json
+
+      - name: Convert SBOM JSON to CSV
+        run: python .github/scripts/sbom_json_to_csv.py sbom.json sbom.csv
