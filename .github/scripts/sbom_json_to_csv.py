@@ -2,8 +2,8 @@ import json
 import csv
 import sys
 from pathlib import Path
+from tabulate import tabulate
 
-# Allow passing input/output file names as arguments (for flexibility)
 input_file = sys.argv[1] if len(sys.argv) > 1 else "sbom.json"
 output_file = sys.argv[2] if len(sys.argv) > 2 else "sbom.csv"
 
@@ -56,3 +56,19 @@ with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
         writer.writerow(row)
 
 print(f"CSV export complete: {output_file}")
+
+with open("sbom_table.txt", "w", encoding="utf-8") as f:
+    table = []
+    for pkg in packages:
+        row = [
+            pkg.get("name", ""),
+            pkg.get("versionInfo", ""),
+            get_type(pkg),
+            pkg.get("supplier", ""),
+            pkg.get("downloadLocation", ""),
+            pkg.get("licenseConcluded", ""),
+            pkg.get("licenseDeclared", ""),
+            get_external_refs(pkg)
+        ]
+        table.append(row)
+    f.write(tabulate(table, columns, tablefmt="grid"))
