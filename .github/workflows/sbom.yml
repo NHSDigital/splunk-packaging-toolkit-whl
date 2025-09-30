@@ -69,3 +69,9 @@ jobs:
 
       - name: Convert SBOM JSON to CSV
         run: python .github/scripts/sbom_json_to_csv.py sbom.json sbom.csv
+      
+      - name: Upload SBOM CSV as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-csv
+          path: sbom.csv
