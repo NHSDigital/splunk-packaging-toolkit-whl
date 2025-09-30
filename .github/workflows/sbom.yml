@@ -54,7 +54,12 @@ jobs:
           echo "Downloading: ${DOWNLOAD_URL}"
           curl -L -o syft.tar.gz "${DOWNLOAD_URL}"
           curl -L -o syft.tar.gz.sha256 "${CHECKSUM_URL}"
-          sha256sum -c syft.tar.gz.sha256
+          EXPECTED=$(cat syft.tar.gz.sha256)
+          ACTUAL=$(sha256sum syft.tar.gz | awk '{print $1}')
+          if [ "$EXPECTED" != "$ACTUAL" ]; then
+            echo "Syft checksum verification failed!"
+            exit 1
+          fi
           tar -xzf syft.tar.gz
           chmod +x syft
           echo "$(pwd)" >> $GITHUB_PATH
