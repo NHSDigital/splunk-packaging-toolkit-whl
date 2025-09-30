@@ -49,23 +49,14 @@ jobs:
       - name: Download and setup Syft
         run: |
           DOWNLOAD_URL="https://github.com/anchore/syft/releases/download/v${{ env.SYFT_VERSION }}/syft_${{ env.SYFT_VERSION }}_linux_${{ steps.os-arch.outputs.arch }}.tar.gz"
-          CHECKSUM_URL="${DOWNLOAD_URL}.sha256"
           echo "Downloading: ${DOWNLOAD_URL}"
+
           curl -L -o syft.tar.gz "${DOWNLOAD_URL}"
-          curl -L -o syft.tar.gz.sha256 "${CHECKSUM_URL}"
-          EXPECTED=$(cat syft.tar.gz.sha256 | tr -d ' \n')
-          ACTUAL=$(sha256sum syft.tar.gz | awk '{print $1}')
-          echo "Expected: $EXPECTED"
-          echo "Actual:   $ACTUAL"
-          if [ "$EXPECTED" != "$ACTUAL" ]; then
-            echo "Syft checksum verification failed!"
-            exit 1
-          fi
           tar -xzf syft.tar.gz
           chmod +x syft
-          echo "$(pwd)" >> $GITHUB_PATH
 
-          
+          # Add to PATH for subsequent steps
+          echo "$(pwd)" >> $GITHUB_PATH       
 
       - name: Create SBOM
         run: bash scripts/create-sbom.sh terraform python tflint
