@@ -20,8 +20,9 @@ columns = [
     "downloadLocation",
     "licenseConcluded",
     "licenseDeclared",
-    "externalRefs"
+    "externalRefs",
 ]
+
 
 def get_type(pkg):
     spdxid = pkg.get("SPDXID", "")
@@ -35,9 +36,11 @@ def get_type(pkg):
             return ref.get("referenceLocator", "").split("/")[0]
     return ""
 
+
 def get_external_refs(pkg):
     refs = pkg.get("externalRefs", [])
     return ";".join([ref.get("referenceLocator", "") for ref in refs])
+
 
 with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=columns)
@@ -51,7 +54,7 @@ with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
             "downloadLocation": pkg.get("downloadLocation", ""),
             "licenseConcluded": pkg.get("licenseConcluded", ""),
             "licenseDeclared": pkg.get("licenseDeclared", ""),
-            "externalRefs": get_external_refs(pkg)
+            "externalRefs": get_external_refs(pkg),
         }
         writer.writerow(row)
 
@@ -68,7 +71,7 @@ with open("sbom_table.txt", "w", encoding="utf-8") as f:
             pkg.get("downloadLocation", ""),
             pkg.get("licenseConcluded", ""),
             pkg.get("licenseDeclared", ""),
-            get_external_refs(pkg)
+            get_external_refs(pkg),
         ]
         table.append(row)
     f.write(tabulate(table, columns, tablefmt="grid"))
